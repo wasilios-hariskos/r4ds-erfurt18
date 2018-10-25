@@ -46,6 +46,7 @@ f <- "Hans"
 
 g <- 2 < 3
 
+class(f)
 # Vektoren
 
 ## Erstellen
@@ -105,8 +106,6 @@ y <- 2
 
 x > y
 
-x > y
-
 x >= y
 
 x == y
@@ -120,26 +119,131 @@ x[idx]
 
 ## Erstellen
 
+help(matrix)
+
+matrix(data = 1:9, 
+       nrow = 3,
+       byrow = TRUE)
+
+matrix(1:9, 3, 3, TRUE)
+
+matrix(nrow = 3,
+       byrow = TRUE,
+       data = 1:9)
+
+help(c)
+
+my_matrix <- matrix(data = 1:9,
+                    nrow = 3,
+                    ncol = 3,
+                    byrow = FALSE)
+
+?c
+
 ## Benennen
+help(rownames)
+rownames(my_matrix) <- c("row 1", "row 2", "row 3")
+my_matrix
+colnames(my_matrix) <- c("col 1", "col 2", "col 3")
+my_matrix
+
+help(matrix)
+
+matrix(data = 1:9,
+       nrow = 3,
+       ncol = 3,
+       byrow = FALSE,
+       dimnames = list(c("row 1", "row 2", "row 3"),
+                       c("col 1", "col 2", "col 3"))
+       )
+
+??matrix # exkurs
 
 ## Summieren von Zeilen
 
+rowSums(my_matrix)
+
 ## Summieren von Spalten
+
+colSums(my_matrix)
+
+## Zeilen oder Spalten hinzufügen
+
+v5 <- c(3, 5, 7)
+
+rbind(my_matrix, my_matrix, v5)
+
+cbind(my_matrix, my_matrix, c(1, 1, 1))
+
+rbind(my_matrix, my_matrix, c("3", "5", "7"))
 
 ## Auswählen
 
+my_matrix[1, 2]
+
+my_matrix[1:2, 2:3]
+
+my_matrix[, 1]
+
+my_matrix[1, ]
+
+my_matrix[1, 1:3]
+
+dim(matrix(1:8, 4))
+
+x <- 1:12 ; dim(x) <- c(3,4)
+x
+
 ## Rechenoperationen
+
+my_matrix * my_matrix
+
+my_matrix ^ 2
+
+my_matrix + my_matrix
+
+my_matrix - my_matrix
+
+my_matrix / my_matrix
+
+my_matrix %*% my_matrix
+
+2 * my_matrix
 
 # Faktoren
 
 ## Erstellen
+?factor
+
+sex_vector <- c("Male", "Female", "Female", "Male")
+
+factor(sex_vector)
 
 ## Nominalskalierte kategoriale Variable (unordered factor)
 
+pet_vector <- c("Dog", "Cat", "Dog")
+factor_pet_vector <- factor(pet_vector)
+factor_pet_vector
+
 ## Ordinalskalierte kategoriale Variable (ordered factor)
+
+temperature_vector <- c("High", "Low", "Low", "Medium")
+factor_temperature_vector <- factor(temperature_vector,
+                                    ordered = TRUE,
+                                    levels = c("Low", "Medium", "High")
+                                    )
+factor_temperature_vector
+
+
 
 ## Änderung des Faktorlevels
 
+help(levels) # ...
+
 ## Kurzdarstellung
+
+summary(factor_temperature_vector)
+summary(pet_vector)
+summary(factor_pet_vector)
 
   
