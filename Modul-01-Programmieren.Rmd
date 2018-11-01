@@ -1,0 +1,471 @@
+---
+title: "Programmieren mit R"
+author: "Wasilios Hariskos"
+date: "29 Oktober 2018 (under construction)"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Um später Datenanalysen durchführen zu können, haben wir in diesem Modul wichtige Datenstrukturen (Objekte) wie Vektoren, Matrizen, Faktoren, Datensätze und Listen kennengelernt.
+
+Das angefertigte R Skript gibt es 
+[hier](https://github.com/wasilios-hariskos/r4ds-erfurt18/blob/master/01-IntroR.R).
+
+
+
+# Einführung in die Basics
+
+Wir haben gelernt wie wir die Konsole von R als Taschenrechner benutzen können und wie wir einer Variablen ein Objekt wie eine Zahl zuordnen können.
+
+# Vektoren
+
+Wir haben gelernt wie wir 
+
++ Vektoren in R erstellen können, 
++ diese benennen können, 
++ Elemente auswählen können und
++ zwei Vektoren vergleichen können.
+
+Ein Vektor kann in R mit der "combine" Funktion `c()` erstellt werden.
+
+Wir haben weitere Funktionen kennengelernt:
+
++ `names()`
++ `sum()`
++ `class()`
+
+Mit der Funktion `help()` können wir mehr über eine Funktion herausfinden.
+
+Für die Zuweisung eines Objekts zu einer Variablen haben wir den Operator `<-`benutzt. Es folgen drei unterschiedliche Arten und Weisen, um eine Variable auszugeben:
+
+```{r}
+a <- 4
+
+print(a)
+
+a
+
+(b <- 5)
+```
+
+
+Die Eingabe des Vektors `c(1, 2, 3, 4, 5)` können wir mit `1:5` abkürzen. Die zweite Schreibweise ist besonders nützlich, wenn der Vektor lang ist.
+
+Beispiel 1:
+
+```{r}
+1:100
+```
+
+Beispiel 2:
+
+```{r}
+200:101
+```
+
+
+Beispiel 3:
+
+```{r}
+-100:100
+```
+
+# Matrizen
+
+Wir haben gelernt wie wir in R Matrizen erstellen können und wir haben verstanden wie man grundlegende Berechnungen mit diesen durchführen kann.
+
+Eine Matrix haben wir definiert als eine (zwei-dimensionale) Kollektion von Elementen (des gleichen Datentyps, zum Beispiel "numeric", "logical" oder "character"), welche in einer festen Anzahl an Zeilen und Spalten angeordnet sind.
+
+Eine Matrix kann in R mit der Funktion `matrix()` erstellt werden.
+
+Wir haben weitere Funktionen kennengelernt:
+
++ `rownames()` und `colnames()`
++ `rowSums()` und `colSums()`
++ `rbind()` und `cbind()`
+
+Wenn wir mehr über eine Funktion wissen wollen, können wir statt `help(matrix)` auch `?matrix` schreiben.
+
+# Faktoren
+
+Sehr oft können Daten einer endlichen Anzahl von Kategorien zugeordnet werden. Zum Beispiel, das Geschlecht einer Versuchsperson kann als männlich oder weiblich kategorisiert werden.
+
+In R werden kategoriale Daten als "factor" gespeichert. Wir haben gelernt wie wir ungeordnete Faktoren (wie Geschlecht) sowie geordnete Faktoren (wie Temperatur) erstellen und vergleichen können.
+
+Ein Faktor kann in R mit der Funktion `factor()` erstellt werden.
+
+Wir haben zudem folgende Funktionen kennengelernt:
+
++ `levels()`
++ `summary()`
+
+# Data Frames
+
+Die meisten Datensätze werden in R in Data Frames gespeichert. Wir haben gelernt wie man 
+
++ Data Frame erstellt, 
++ Teile des Data Frames auswählt und
++ den Data Frame nach einer Variablen ordnet.
+
+In einem Data Frame sind die Variablen eines Datensatzes als Spalten und die Beobachtugen als Zeilen angeordnet.
+
+Spalten korrepondieren zu Fragen:
+
++ "Logical": Bist du verheiratet? oder andere Ja/Nein Fragen
++ "Numeric": Wie alt bist du?
++ "Character": Was hälst du von diesem Produkt? oder andere offene Fragen
+
+Wichtig: Im Vergleich zu einer Matrix müssen die Elemente eines Data Frames nicht vom selben Typ sein (nur die Spalten müssen vom selben Typ sein).
+
+Wir haben zwei Datensätze, die schon in R gespeichert sind, genutzt: 
+
++ `mtcars`
++ `airquality`
+
+Dabei war die Hilfefunktion `help()` oder`?` nützlich, um mehr Infos über die Datensätze zu erhalten.
+
+Ein neuer Data Frame kann in R mit der Funktion `data.frame()` erstellt werden.
+
+Wir haben zudem folgende Funktionen kennengelernt:
+
++ `head()` und `tail()`
++ `str()`
++ `subset()`
++ `order()`
+
+# Listen
+
+Listen, können im Vergleich zu Vektoren, Elemente unterschiedlichen Typs enthalten. Wir haben gelernt wie man eine Liste erstellt, benennt und ein weiteres Element hinzufügt.
+
+Eine Liste kann in R mit der Funktion `list()` erstellt werden.
+
+# Operatoren
+
+| Operator | Beschreibung |
+| -------- | ------------ |
+|+, -  | Addition, Subtraktion|
+|*, ^ oder **, %*% | Multiplikation, Potenz, Matrizenmultiplikation |
+|/, %/%, %% | Division, Ganzzahlige Division, Modulo Division|
+|||
+| ==, != | gleich, ungleich |
+| >, >= | größer, größer gleich |
+| <, <= | kleiner, kleiner gleich |
+|||
+| ! | nicht (Negation) |
+| &, && | und |
+| \|, \|\| | oder |
+| xor() | entweder oder (ausschließend) |
+|||
+
+## Was passiert in diesen Fällen?
+
+```{r}
+"r" == "R" # R unterscheidet zwischen Groß- und Kleinschreibung
+```
+
+ 
+```{r}
+"Guten Morgen" < "Guten Tag" # lexikographisch
+```
+
+```{r}
+FALSE < TRUE # wird als 0 < 1 interpretiert
+```
+
+## Die Negation
+
+```{r}
+!TRUE
+!FALSE
+```
+
+## Das logische UND
+
+Nur WAHR, wenn beide Aussagen wahr sind; 
+sonst FALSCH.
+
+```{r}
+TRUE & TRUE
+TRUE & FALSE
+FALSE & TRUE
+FALSE & FALSE
+```
+
+## Das logische ODER (einschließend)
+
+Nur WAHR, wenn mindestens eine Aussage WAHR ist;
+sonst FALSCH.
+
+
+```{r}
+TRUE | TRUE
+TRUE | FALSE
+FALSE | TRUE
+FALSE | FALSE
+```
+
+## Das logische ENTWEDER ODER (ausschließend)
+Nur WAHR, wenn genau eine Aussage WAHR ist;
+sonst FALSCH.
+
+```{r}
+xor(TRUE, TRUE)
+xor(TRUE, FALSE)
+xor(FALSE, TRUE)
+xor(FALSE, FALSE)
+```
+
+## Vektorwertiges &, | vs nicht vektorwertiges &&, ||
+
+```{r}
+FALSE && TRUE # nur der erste Ausdruck wird ausgewertet
+TRUE && FALSE # auch der zweite Ausdruck wird ausgewertet
+```
+
+
+```{r}
+c(FALSE, FALSE, TRUE) &  c(FALSE, TRUE, TRUE)
+
+c(FALSE, FALSE, TRUE) && c(FALSE, TRUE, TRUE)
+```
+
+```{r}
+!c(FALSE, FALSE, TRUE) &  !c(FALSE, TRUE, TRUE)
+
+!c(FALSE, FALSE, TRUE) && !c(FALSE, TRUE, TRUE)
+```
+
+```{r}
+c(FALSE, FALSE, TRUE) |  c(FALSE, TRUE, TRUE)
+
+c(FALSE, FALSE, TRUE) || c(FALSE, TRUE, TRUE)
+```
+
+```{r}
+c(TRUE, FALSE, TRUE) |  c(FALSE, TRUE, TRUE)
+c(TRUE, FALSE, TRUE) || c(FALSE, TRUE, TRUE)
+```
+
+# Bedingte Anweisungen (Conditional Statements)
+
+Beispiel 1 (if)
+
+```{r}
+x <- -3 # [change to 5 and run again, set back to -3]
+
+if (x < 0) { # Bedingung
+  print("x ist eine negative Zahl") # Ausdruck
+}
+```
+
+Beispiel 2 (if, else)
+
+```{r}
+x <- -3 # [change to 5 and run again, set back to -3]
+
+if (x < 0) { # Bedingung
+  print("x ist eine negative Zahl") # Ausdruck1
+} else {
+  print("x ist eine nicht-negative Zahl") # Ausdruck2
+}
+```
+
+Beispiel 3 (if, else if, else)
+
+```{r}
+x <- -3 # [change to 0 and 5 and run again, set back to -3]
+
+if (x < 0) { # Bedingung1
+  print("x ist eine negative Zahl") # Ausdruck1
+} else if (x == 0) { # Bedingung2
+   print("x ist gleich Null") # Ausdruck1
+  } else {
+  print("x ist eine nicht-negative Zahl") # Ausdruck1
+}
+```
+
+# Schleifen (loops)
+## while loop
+
+Beispiel 1 (while loop)
+
+```{r}
+count <- 1
+
+while (count <= 3) {  
+  print(paste("Der Count ist gleich", count))
+  count <- count + 1
+}
+```
+
+Beispiel 2 (while loop with break)
+
+```{r}
+count <- 1
+
+while (count <= 3) {
+  if (count == 2) {
+    break
+  }
+  
+  print(paste("Der Count ist gleich", count))
+  count <- count + 1
+}
+```
+
+## for loop
+
+Beispiel 1 (for loop over vector)
+
+```{r}
+new_states <- c("Brandenburg",
+                "Mecklenburg-Vorpommern",
+                "Sachsen",
+                "Sachsen-Anhalt",
+                "Thüringen")
+
+for (state in new_states) {
+  print(state)
+}
+```
+
+Beispiel 2 (for loop over list)
+
+```{r}
+new_states <- list("Brandenburg",
+                "Mecklenburg-Vorpommern",
+                "Sachsen",
+                "Sachsen-Anhalt",
+                "Thüringen")
+
+for (state in new_states) {
+  print(state)
+}
+```
+
+Beispiel 3 (for loop with break)
+
+```{r}
+new_states <- list("Brandenburg",
+                "Mecklenburg-Vorpommern",
+                "Sachsen",
+                "Sachsen-Anhalt",
+                "Thüringen")
+
+for (state in new_states) {
+  if (nchar(state) < 10) {
+    break
+  }
+  
+  print(state)
+}
+```
+Beispiel 4 (for loop with next)
+
+```{r}
+new_states <- list("Brandenburg",
+                "Mecklenburg-Vorpommern",
+                "Sachsen",
+                "Sachsen-Anhalt",
+                "Thüringen")
+
+for (state in new_states) {
+  if (nchar(state) < 10) {
+    next
+  }
+  
+  print(state)
+}
+```
+
+Beispiel 5 (for loop with index)
+
+```{r}
+new_states <- c("Brandenburg",
+                "Mecklenburg-Vorpommern",
+                "Sachsen",
+                "Sachsen-Anhalt",
+                "Thüringen")
+
+for (i in 1:length(new_states)) {
+  print(paste(new_states[i],
+              "ist auf Position",
+              i,
+              "im new_states Vektor")
+        )
+}
+```
+
+# Funktionen
+
+## Eine Funktion in R aufrufen
+
+```{r}
+grades <- c(1, 4, 2, 2, 3, 1, NA) # die letzte Note steht nicht fest
+
+mean_grades <- mean(grades) # mittelwert berechnen
+
+mean_grades # mittelwert ausgeben
+
+```
+
+## Die Dokumentation einer Funktion aufrufen
+
+```{r}
+help(mean)
+```
+
+```{r}
+?NA
+```
+
+## Wie kann man den Mittelwert bei fehlenden Werten berechnen?
+
+```{r}
+grades <- c(1, 4, 2, 2, 3, 1, NA) # die letzte Note steht nicht fest
+
+mean_grades <- mean(x = grades,
+                    na.rm = TRUE) # mittelwert ohne NAs berechnen
+
+mean_grades # mittelwert ausgeben
+```
+
+## Eine Funktion selber schreiben
+
+```{r}
+grades <- c(1, 4, 2, 2, 3, 1)
+
+mittelwert <- function(x) {
+  n <- length(x)
+  total <- sum(x)
+  total / n
+}
+
+mittelwert(grades)
+```
+
+## Eine selbstgeschriebene Funktion verbessern
+
+```{r}
+grades <- c(1, 4, 2, 2, 3, 1, NA)
+
+help(NA) # go to see also, try na.omit
+
+mittelwert <- function(x) {
+  x <- na.omit(x) # position matters
+  n <- length(x)
+  total <- sum(x)
+  return(total / n)
+}
+
+mittelwert(grades)
+
+```
+
+
