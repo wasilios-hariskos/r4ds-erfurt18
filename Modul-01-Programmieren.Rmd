@@ -3,9 +3,9 @@ title: "Programmieren mit R"
 author: "Wasilios Hariskos"
 date: "29 Oktober 2018 (under construction)"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
