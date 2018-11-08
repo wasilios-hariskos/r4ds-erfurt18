@@ -1,7 +1,7 @@
 ---
 title: "Programmieren mit R"
 author: "Wasilios Hariskos"
-date: "29 Oktober 2018"
+date: "01 November 2018"
 output:
   html_document: default
   pdf_document: default

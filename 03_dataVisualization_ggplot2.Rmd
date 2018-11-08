@@ -1,0 +1,244 @@
+---
+title: "Data visualization with ggplot2"
+author: "Wasilios Hariskos"
+date: "15 November 2018"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Load packages
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# install.packages("ggplot2")
+library(ggplot2) # for data visualization
+library(gapminder) # dataset
+library(dplyr) # for data tranformation
+```
+
+# A scatterplot with five dimensions
+
+## Prepare data
+
+```{r echo=TRUE}
+gapminder_1997 <- gapminder %>%
+  filter(year == 1997)
+  glimpse(gapminder_1997)
+```
+
+## Create a new ggplot object, ...
+
++ specify gapminder_1997 as input data frame,
++ add a point geom,
++ map `gdpPercap` to `x` aesthetic,
++ map `lifeExp` to `y` aesthetic
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) + 
+  geom_point(mapping = aes(x = gdpPercap, 
+                           y = lifeExp))
+```
+
+## Change the scale of x-axis to log10
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) +
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp)) +
+  scale_x_log10()
+```
+
+On a logarithmic 10 scale each unit on the x-axis $(b - a)$ represents a change of 10 times $a$, i.e. $b = a \cdot 10$. As a result, the observations with a `gdpPercap` smaller than $10000$ are less crowded.
+
+
+```{r echo=TRUE}
+(x <- c(10, 100, 1000, 10000, 100000))
+
+log10(x) # puts elements of x equidistant (labels of x remain)
+```
+
+## Map continent to color aesthetic
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) +
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp,
+                           color = continent)) +
+  scale_x_log10()
+```
+
+The aesthetic `color` works well with a categorical variable such as `continent`. 
+Notice that a legend is added that indicates the mapping between aesthetic `color` and variable `continent`.
+We see that the red colored African countries tend to have the lowest `gdpPercap` while the opposite is true for the blue colored European countries. 
+
+## Map population to size aesthetic
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) +
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp,
+                           color = continent,
+                           size = pop)) +
+  scale_x_log10()
+```
+
+The aesthetic `size` works well with numeric variables such as `pop`. Here, countries with higher population get larger points. 
+Notice that a legend with scientific notation is added: 
+`1.2e+09` is equal to a population of $1.2 \cdot 10^9$ or 1.2 billion.
+
+## Use faceting to compare development accross years
+
+```{r echo=TRUE}
+ggplot(data = gapminder) +
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp,
+                           color = continent,
+                           size = pop)) +
+  scale_x_log10() +
+  facet_wrap(facets = ~ year,
+             nrow = 3)
+```
+
+The function `facet_wrap()` divides the plot into subplots, with each subplot representing a different year. 
+The formula `facets = ~ year` means `by year`.
+
+## Summary
+
++ We used function `ggplot()` to create a ggplot object. 
++ We declared the input data frame to be a filtered dataset `gapminder_1997` that contains only observations from 1997.
++ We created a scatterplot with function `geom_point()` 
++ We mapped the variables `gdpPercap` and `lifeExp` to the `x` and  `y` aesthetics.
++ We changed the x-axis scale to a log scale with function `scale_x_log10()` so that we can see the observations with low `gdpPercap` better.
++ We mapped two more variables `continent` and `pop` to the `color` and `size` aesthetics.
++ Lastly, we used the full `gapminder` dataset and added the fifth dimension `year` to divide the plot into facets (subplots) with function `facet_wrap()`.
+
+# Line plots for visualizing change over time
+
+## Scatterplot vs. line plot
+
+So far we used only scatterplots. The scatterplot is most useful for displaying the relationship between two continuous variables.
+Each point on a scatterplot represents one observation.
+
+Let's look at some code chunks that we used to create a scatterplot (see last section of the dplyr slides on data transformation).
+
+```{r echo=TRUE}
+by_continent_year <- gapminder %>%
+  group_by(continent, year) %>%
+  summarize(meanLifeExp = mean(lifeExp),
+            medianLifeExp = median(lifeExp),
+            minGdpPercap = min(gdpPercap),
+            maxGdpT = max((gdpPercap * pop)/1e12),
+            totalPopB = sum(pop/1e9))
+```
+
+We constructed the following scatterplot:
+
+```{r echo=TRUE}
+ggplot(data = by_continent_year) +
+  geom_point(mapping = aes(x = year, 
+                           y = meanLifeExp, 
+                           color = continent))
+```
+
+Since, we look at a change over time, we change the type of plot from `geom_point` to `geom_line()` to connect the observations between years.
+
+```{r echo=TRUE}
+ggplot(data = by_continent_year) +
+  geom_line(mapping = aes(x = year, 
+                          y = meanLifeExp, 
+                          color = continent))
+```
+
+## Line plot showing the change in meanGdpPercap over time
+
+```{r echo=TRUE}
+by_year <- gapminder %>%
+  group_by(year) %>%
+  summarize(meanGdpPercap =  mean(gdpPercap))
+```
+
+```{r echo=TRUE}
+ggplot(data = by_year) +
+  geom_line(mapping = aes(x = year, y = meanGdpPercap)) +
+  expand_limits(y = 0)
+```
+
+## Line plot showing the change in medianGdpPercap by continent over time
+
+```{r echo=TRUE}
+by_year_continent <- gapminder %>%
+  group_by(year, continent) %>%
+  summarize(meanGdpPercap =  mean(gdpPercap))
+```
+
+
+```{r echo=TRUE}
+ggplot(data = by_year_continent) +
+  geom_line(mapping = aes(x = year, 
+                          y = meanGdpPercap, 
+                          color = continent)) +
+  expand_limits(y = 0)
+```
+
+# Bar plots for comparing statistics among several categories
+
+```{r echo=TRUE}
+europe1997 <- gapminder %>%
+  filter(year == 1997, 
+         continent == "Europe",
+         pop > 50e6)
+
+europe1997
+```
+
+```{r echo=TRUE}
+ggplot(data = europe1997) +
+geom_col(mapping = aes(x = country, 
+                       y = lifeExp))
+```
+
+# Histograms for describing the distribution of a numeric variable
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) + 
+  geom_histogram(mapping = aes(x = lifeExp))
+```
+
+Adjust the bin width to 5 years with argument `binwidth`. Which information do you gain if the `color` aesthetic is set to `continent`?
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) + 
+  geom_histogram(mapping = aes(x = lifeExp, 
+                               color = continent),
+                 binwidth = 5)
+```
+
+# Boxplots for comparing distributions of a numeric variable among several categories
+
+## The distribution of lifeExp by continent
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) + 
+  geom_boxplot(mapping = aes(x = continent,
+                             y = lifeExp))
+```
+
+The boxplot visualizes all "outlying" points individually and five summary statistics:
+
++ horizontal line: the median of the distribution
++ lower (upper) box called hinge: 1st (3rd) quartile or 25th (75th) percentile 
++ lower (upper) vertical line called whisker: extends from the hinge to the smallest (largest) value no further than $1.5 \cdot IQR$,
+
+where $IQR$ is the inter-quartile range or the distance between the 1st and 3rd quartiles. See `?geom_boxplot` for more information. 
+
+## The distribution of gdpPercap by continent
+
+```{r echo=TRUE}
+ggplot(data = gapminder_1997) + 
+  geom_boxplot(mapping = aes(x = continent,
+                             y = gdpPercap)) + 
+  scale_y_log10() +
+  ggtitle(label = "Comparing GDP per capita across continents in 1997")
+```

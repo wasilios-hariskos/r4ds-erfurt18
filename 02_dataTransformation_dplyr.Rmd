@@ -1,7 +1,7 @@
 ---
 title: "Data transformation with dplyr"
 author: "Wasilios Hariskos"
-date: "6 November 2018"
+date: "8 November 2018"
 output: slidy_presentation
 ---
 
@@ -20,7 +20,9 @@ library(gapminder)
 gapminder 
 ```
 
-With `?gapminder` you can find out more about the gapminder dataset. Notice that the gaminder dataset is stored as a tibble, a modern take on data frames. Use `?tibble` to find out more about tibbles. 
+In this module we will use data from gapminder, which tracks demographic data in countries of the world over time. 
+With `?gapminder` you can find out more about the gapminder dataset.
+Notice that the gaminder dataset is stored as a tibble, a modern take on data frames. Use `?tibble` to find out more about tibbles. 
 
 # The dplyr package
 
@@ -47,13 +49,11 @@ Try `?glimpse` to find out more.
 ## One criterion: Country equals Germany
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# install.packages("dplyr")
-library(dplyr)
 gapminder %>%
   filter(country == "Germany")
 ```
 
-## Two criteria: Country equals Germany and population greater than 80 MM.
+## Two criteria: Country equals Germany and year >= 1982
 
 ```{r echo=TRUE}
 gapminder %>%
@@ -185,14 +185,14 @@ Initialize ggplot object and declare the input data frame.
 Try `?ggplot` for more information. 
 
 ```{r echo=TRUE}
-ggplot(by_continent_year)
+ggplot(data = by_continent_year)
 ```
 
 Add point geom to create a scatterplot with aesthetics mappings x-axis equals year and y-axis equals mean life expectancy. 
 Try `?geom_point` and try `?aes` for more information.
 
 ```{r echo=TRUE}
-ggplot(by_continent_year) +
+ggplot(data = by_continent_year) +
   geom_point(mapping = aes(x = year, 
                            y = meanLifeExp))
 ```
@@ -200,18 +200,18 @@ ggplot(by_continent_year) +
 Map continent to color aesthetic.
 
 ```{r echo=TRUE}
-ggplot(by_continent_year) +
-  geom_point(aes(x = year, 
-                 y = meanLifeExp, 
-                 color = continent))
+ggplot(data = by_continent_year) +
+  geom_point(mapping = aes(x = year, 
+                           y = meanLifeExp, 
+                           color = continent))
 ```
 
 Map total population in billion to size aesthetic.
 
 ```{r echo=TRUE}
-ggplot(by_continent_year) +
-  geom_point(aes(x = year, 
-                 y = meanLifeExp, 
-                 color = continent,
-                 size = totalPopB))
+ggplot(data = by_continent_year) +
+  geom_point(mapping = aes(x = year, 
+                           y = meanLifeExp, 
+                           color = continent,
+                           size = totalPopB))
 ```
