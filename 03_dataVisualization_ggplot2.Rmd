@@ -25,7 +25,8 @@ library(dplyr) # for data tranformation
 ```{r echo=TRUE}
 gapminder_1997 <- gapminder %>%
   filter(year == 1997)
-  glimpse(gapminder_1997)
+
+glimpse(gapminder_1997)
 ```
 
 ## Create a new ggplot object, ...
@@ -206,12 +207,12 @@ ggplot(data = gapminder_1997) +
   geom_histogram(mapping = aes(x = lifeExp))
 ```
 
-Adjust the bin width to 5 years with argument `binwidth`. Which information do you gain if the `color` aesthetic is set to `continent`?
+Adjust the bin width to 5 years with argument `binwidth`. Which information do you gain if the `fill` aesthetic is set to `continent`?
 
 ```{r echo=TRUE}
 ggplot(data = gapminder_1997) + 
   geom_histogram(mapping = aes(x = lifeExp, 
-                               color = continent),
+                               fill = continent),
                  binwidth = 5)
 ```
 
