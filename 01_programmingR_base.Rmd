@@ -284,9 +284,9 @@ x <- -3 # [change to 0 and 5 and run again, set back to -3]
 if (x < 0) { # Bedingung1
   print("x ist eine negative Zahl") # Ausdruck1
 } else if (x == 0) { # Bedingung2
-   print("x ist gleich Null") # Ausdruck1
+   print("x ist gleich Null") # Ausdruck2
   } else {
-  print("x ist eine nicht-negative Zahl") # Ausdruck1
+  print("x ist eine nicht-negative Zahl") # Ausdruck3
 }
 ```
 
