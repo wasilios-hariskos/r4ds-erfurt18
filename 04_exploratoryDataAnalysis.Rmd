@@ -36,13 +36,13 @@ breaks_lifeExp <- quantile(x = gapminder_1997$lifeExp,
 breaks_lifeExp
 ```
 
-```{r}
+```{r echo=TRUE}
 breaks_gdpPercap <- quantile(x = gapminder_1997$gdpPercap,
                              probs = c(0, 1/3, 2/3, 1))
 breaks_gdpPercap
 ```
 
-```{r}
+```{r echo=TRUE}
 categorical_1997 <- gapminder_1997 %>%
   mutate(lifeExpCat = cut(x = lifeExp,
                           breaks = breaks_lifeExp,
@@ -56,21 +56,21 @@ glimpse(categorical_1997)
 
 We check the levels of the new categorical variables
 
-```{r}
+```{r echo=TRUE}
 levels(categorical_1997$lifeExpCat)
 ```
 
-```{r}
+```{r echo=TRUE}
 levels(categorical_1997$gdpPercapCat)
 ```
 
 We check with `table` if the data categorization was correct:
 
-```{r}
+```{r echo=TRUE}
 table(categorical_1997$lifeExpCat)
 ```
 
-```{r}
+```{r echo=TRUE}
 table(categorical_1997$gdpPercapCat)
 ```
 
@@ -80,7 +80,7 @@ table(categorical_1997$gdpPercapCat)
 
 We use `table()` to display the number of countries of by continent. 
 
-```{r}
+```{r echo=TRUE}
 table(categorical_1997$continent)
 ```
 
@@ -97,7 +97,7 @@ ggplot(data = categorical_1997) +
 
 We use `table()` to create a contingency table of the counts of countries at each combination of factor levels of `continent` and `lifeExpCat`: 
 
-```{r}
+```{r echo=TRUE}
 table(categorical_1997$continent, 
       categorical_1997$lifeExpCat)
 ```
@@ -132,7 +132,7 @@ ggplot(data = categorical_1997) +
 
 The same information depicted in the stacked bar chart can be displayed by a side-by-side barchart. To do so, we set `position = "dodge"`.
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = categorical_1997) + 
   geom_bar(mapping = aes(x = continent, 
                          fill = lifeExpCat),
@@ -143,7 +143,7 @@ ggplot(data = categorical_1997) +
 
 If we reverse the mapping of the variables `continent`and `lifeExpCat`, we can look at the data from a different angle.
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = categorical_1997) + 
   geom_bar(mapping = aes(x = lifeExpCat, 
                          fill = continent),
@@ -154,7 +154,7 @@ ggplot(data = categorical_1997) +
 
 The corresponding contingency table is:
 
-```{r}
+```{r echo=TRUE}
 table(categorical_1997$lifeExpCat, 
       categorical_1997$continent)
 ```
@@ -171,7 +171,7 @@ ggplot(data = categorical_1997) +
 
 Use `position = "fill"`to change from count to proportion.
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = categorical_1997) + 
   geom_bar(mapping = aes(x = continent, 
                          fill = lifeExpCat),
@@ -209,7 +209,7 @@ ggplot(data = gapminder_1997) +
 
 ## Marginal histogram
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = gapminder_1997) +
   geom_histogram(mapping = aes(x = gdpPercap)) +
   ggtitle(label = "Distribution of GDP per capita",
@@ -219,7 +219,7 @@ ggplot(data = gapminder_1997) +
 
 ## Conditional histogram
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = filter(gapminder_1997, lifeExp > 77)) +
   geom_histogram(mapping = aes(x = gdpPercap)) +
   ggtitle(label = "Distribution of GDP per capita for life expectancy more than 77 years",
@@ -237,7 +237,7 @@ The bin width of a date variable is the number of days in each time; the bin wid
 Number of bins. Overridden by binwidth. Defaults to 30.
 
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = gapminder_1997) +
   geom_histogram(mapping = aes(x = gdpPercap),
                  binwidth = 10000) +
@@ -245,7 +245,37 @@ ggplot(data = gapminder_1997) +
           subtitle = "US$, inflation-adjusted, year 1997")
 ```
 
-```{r}
+What does a count of over 70 for the first bin mean?
+
+```{r echo=TRUE}
+gapminder_1997 %>% 
+  filter(gdpPercap <= 5000) %>% 
+  summarize(count = n())
+```
+
+What does a count of over 35 for the first bin mean?
+
+```{r echo=TRUE}
+gapminder_1997 %>% 
+  filter(gdpPercap > 5000 & gdpPercap <= 15000 ) %>% 
+  summarize(count = n())
+```
+
+How can we answer the above questions in a more principled manner?
+
+```{r echo=TRUE}
+gapminder_1997 %>%
+  mutate(bins = ifelse(gdpPercap > -5000 & gdpPercap <=  5000, 0,
+                ifelse(gdpPercap >  5000 & gdpPercap <= 15000, 10000,
+                ifelse(gdpPercap > 15000 & gdpPercap <= 25000, 20000,
+                ifelse(gdpPercap > 25000 & gdpPercap <= 35000, 30000,
+                                                               40000))))) %>% 
+  group_by(bins) %>% 
+  summarize(count = n())
+```
+
+
+```{r echo=TRUE}
 ggplot(data = gapminder_1997) +
   geom_histogram(mapping = aes(x = gdpPercap),
                  binwidth = 1000) +
@@ -253,7 +283,7 @@ ggplot(data = gapminder_1997) +
           subtitle = "US$, inflation-adjusted, year 1997")
 ```
 
-```{r}
+```{r echo=TRUE}
 ggplot(data = gapminder_1997) +
   geom_histogram(mapping = aes(x = gdpPercap),
                  binwidth = 100) +
@@ -263,7 +293,7 @@ ggplot(data = gapminder_1997) +
 
 ## Box plots for outliers
 
-```{r}
+```{r echo=TRUE}
   ggplot(data = gapminder_1997) +
   geom_boxplot(mapping = aes(x = 1, 
                              y = gdpPercap)) +
@@ -271,7 +301,16 @@ ggplot(data = gapminder_1997) +
           subtitle = "US$, inflation-adjusted, year 1997")
 ```
 
-```{r}
+Let us have a closer look at the five outliers with `gdpPercap > 32000`.
+
+```{r echo=TRUE}
+gapminder_1997 %>% 
+  filter(gdpPercap > 32000)
+```
+
+
+
+```{r echo=TRUE}
   ggplot(data = filter(gapminder_1997, gdpPercap <= 32000)) +
   geom_boxplot(mapping = aes(x = 1, 
                              y = gdpPercap)) +
@@ -279,9 +318,17 @@ ggplot(data = gapminder_1997) +
           subtitle = "US$, inflation-adjusted, year 1997")
 ```
 
-## Plot selection (Check for bimodality and skewness)
+Let us have a closer look at the outliers with `gdpPercap <= 32000 & gdpPercap > 25000`. 
 
-```{r}
+```{r echo=TRUE}
+gapminder_1997 %>% 
+  filter(gdpPercap > 25000, gdpPercap <= 32000) %>% 
+  arrange(-gdpPercap)
+```
+
+## Plot selection (check for bimodality and skewness)
+
+```{r echo=TRUE}
   ggplot(data = gapminder_1997) +
   geom_density(mapping = aes(x = gdpPercap)) +
   ggtitle(label = "Distribution of GDP per capita",
@@ -290,7 +337,7 @@ ggplot(data = gapminder_1997) +
 
 ## Three variable plot
 
-```{r}
+```{r echo=TRUE}
 gapminder_1997 <- gapminder_1997 %>% 
   mutate(incomeAboveMedian = gdpPercap > median(gdpPercap))
 
@@ -303,30 +350,43 @@ ggplot(data = gapminder_1997) +
 ```
 
 
+Let us have a closer look at the African countries with above median income (at country level) and life expectancy below 65 (outliers).
+
+```{r echo=TRUE}
+gapminder_1997 %>% 
+  filter(continent == "Africa",
+         incomeAboveMedian,
+         lifeExp <= 65)
+
+```
+
 
 # Numerical summaries
 
 ## Characeristics of a distribution
 
-+ center
-+ spread or variability
-+ shape which depends on modality and skew
-+ outliers
+* center
+* spread or variability
+* shape which depends on modality and skew
+* outliers
 
 ## Graphical tools for numerical data
 
-+ Histogram
+Histogram
+
   + aggregates continuous data into bins
-  + draws a bar with bar height representig the number of cases in that bin 
+  + draws a bar with bar height representing the number of cases in that bin 
   + can be faceted by a categorical variable
 
-+ Boxplot
+Boxplot
+
   + for comparing multiple distributions
   + uses robust measures of center and spread: median and IQR (interquartile range)
   + flags potential outliers
   + do not use for multimodal distributions
 
-+ Density plot
+Density plot
+
   + draws a smooth line reprenting the shape of the distributon
   + can be faceted or overlaid by mapping the categorical variable to `color` or `fill`
 
@@ -334,11 +394,13 @@ ggplot(data = gapminder_1997) +
 
 Aim is to indentify a typical observation.
 
-+ Mean: `mean()`
+Mean: `mean()`
+
   + commonly known and used
   + but sensitive to extreme values
   
-+ Median: `median()` 
+Median: `median()` 
+
   + middle value in a sorted data set 
   + use instead of mean if distribution is skewed
 
@@ -346,7 +408,7 @@ Important: Consider the shape of the distribution before selecting a measure of 
 
 ## Calculate center measures
 
-Compute groupwise mean and median lifeExp for each continent:
+Compute groupwise mean and median `lifeExp` for each continent:
 
 ```{r echo=TRUE}
 gapminder_1997 %>%
@@ -355,7 +417,7 @@ gapminder_1997 %>%
             medianLifeExp = median(lifeExp))
 ```
 
-Generate box plots of lifeExp for each continent to identify outliers:
+Generate box plots of `lifeExp` for each continent to identify outliers:
 
 ```{r echo=TRUE}
   ggplot(data = gapminder_1997) +
@@ -375,12 +437,14 @@ ggplot(data = gapminder_1997) +
 
 Aim is to indentify variability in our data.
 
-+ Standard deviation: `sd()`
+Standard deviation: `sd()`
+
   + commonly known and used
   + easy interpretation because it is measured in the same unit as the raw data 
   + but sensitive to extreme values
   
-+ IQR (interquartile range): `IQR()`
+IQR (interquartile range): `IQR()`
+
   + distance between the first quartile and the third quartile
   + @boxplot: equal to the height of the box
   + use instead of standard deviation if distribution is skewed
@@ -389,52 +453,133 @@ Important: Consider the shape of the distribution before selecting a measure of 
 
 ## Calculate spread measures
 
-Let's extend the powerful group_by() and summarize() syntax to measures of spread. If you're unsure whether you're working with symmetric or skewed distributions, it's a good idea to consider a robust measure like IQR in addition to the usual measures of variance or standard deviation.
+Compute groupwise measures of spread and the count of countries for `lifeExp` by `continent`.
 
-The gap2007 dataset that you created in an earlier exercise is available in your workspace.
-
-+ For each continent in gap2007, summarize life expectancies using the sd(), the IQR(), and the count of countries, n(). No need to name the new columns produced here. The n() function within your summarize() call does not take any arguments.
-+ Graphically compare the spread of these distributions by constructing overlaid density plots of life expectancy broken down by continent.
-
-```{r}
-# Compute groupwise measures of spread
+```{r echo=TRUE}
 gapminder_1997 %>%
   group_by(continent) %>%
   summarize(sd(lifeExp),
             IQR(lifeExp),
             n())
+```
 
-# Generate overlaid density plots
-gapminder_1997 %>%
-  ggplot(aes(x = lifeExp, fill = continent)) +
-  geom_density(alpha = 0.3)
+Graphically compare the spread of the distributions with an overlaid density plots of `lifeExp` by `continent`.
 
-# Generate overlaid density plots
-filter(gapminder_1997, continent %in% c("Americas", "Europe")) %>%
-  ggplot(aes(x = lifeExp, fill = continent)) +
-  geom_density(alpha = 0.3)
+```{r echo=TRUE}
+  ggplot(gapminder_1997) +
+  geom_density(aes(x = lifeExp, 
+                   fill = continent), 
+               alpha = 0.3)
+```
+
+Have a closer llok at `Americas` and `Europe`.
+
+```{r echo=TRUE}
+AMEvsEUR <- gapminder_1997 %>% 
+  filter(continent %in% c("Americas", "Europe"))
+  
+ggplot(AMEvsEUR) +
+  geom_density(aes(x = lifeExp, 
+                   fill = continent), 
+               alpha = 0.3)
 ```
 
 ## Choose measures for center and spread
 
-```{r}
-# Life Expectancy in the Americas
+The density plots show the shape of two distributions.
+
+Select and calculate appropriate numerical summaries to describe their centers and spreads.
+
+```{r echo=TRUE}
 p1 <- gapminder_1997 %>%
   filter(continent == "Americas") %>%
-  ggplot(aes(x = lifeExp)) +
-  geom_density() +
+  ggplot() +
+  geom_density(aes(x = lifeExp)) +
   ggtitle(label = "Life expectancy in the Americas",
           subtitle = "Year 1997")
 
-# Country-Level Population
 p2 <- gapminder_1997 %>%
-  ggplot(aes(x = pop)) +
-  geom_density() +
+  ggplot() +
+  geom_density(aes(x = pop)) +
   ggtitle(label = "Country-Level Population",
           subtitle = "Year 1997")
 
 gridExtra::grid.arrange(p1, p2, ncol = 2)
 ```
 
-The density plots show the shape of two distributions.
+Compute stats for `lifeExp` in Americas
 
+```{r echo=TRUE}
+gapminder_1997 %>%
+  filter(continent == "Americas") %>%
+  summarize(mean(lifeExp),
+            sd(lifeExp),
+            median(lifeExp),
+            IQR(lifeExp))
+```
+
+Compute statistics for `pop`
+
+```{r echo=TRUE}
+gapminder_1997 %>%
+  summarize(mean(pop),
+            sd(pop),
+            median(pop),
+            IQR(pop))
+```
+
+
+Remember: Like mean and standard deviation, median and IQR measure the central tendency and spread, respectively, but are robust to outliers and non-normal data.
+
+## Transformations
+
+Highly skewed distributions can make it very difficult to learn anything from a visualization. Transformations can be helpful in revealing the more subtle structure.
+
+
+```{r echo=TRUE}
+# Create density plot of old variable
+gapminder_1997 %>%
+  ggplot(aes(x = pop)) +
+  geom_density()
+
+# Transform the skewed pop variable
+gapminder_1997 <- gapminder_1997 %>%
+  mutate(log_pop = log(pop))
+
+# Create density plot of new variable
+gapminder_1997 %>%
+  ggplot(aes(x = log_pop)) +
+  geom_density()
+```
+
+```{r echo=TRUE}
+# Alternative way: Scaling
+gapminder_1997 %>%
+  ggplot(aes(x = pop)) +
+  geom_density() +
+  scale_x_log10()
+```
+
+## Identify outliers
+
+```{r echo=TRUE}
+# Filter for Asia, create box plot of lifeExp
+gapminder_1997 %>%
+  filter(continent == "Asia") %>%
+  ggplot(aes(x = 1, y = lifeExp)) +
+  geom_boxplot()
+```
+
+
+```{r echo=TRUE}
+# Filter for Asia, add column indicating outliers
+gap_asia <- gapminder_1997 %>%
+  filter(continent == "Asia") %>%
+  mutate(is_outlier = lifeExp < 50)
+
+# Remove outliers, create box plot of lifeExp
+gap_asia %>%
+  filter(is_outlier == FALSE) %>%
+  ggplot(aes(x = 1, y = lifeExp)) +
+  geom_boxplot()
+```

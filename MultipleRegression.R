@@ -90,8 +90,11 @@ get_regression_table(score_model_interaction)
 regression_points <- get_regression_points(score_model_interaction)
 regression_points
 
-score_model_interaction2 <- lm(score ~ age + gender:age, data = evals_ch7)
-get_regression_table(score_model_interaction)
+score_model_interaction2 <- lm(score ~ age + interaction, data = mutate(evals_ch7, 
+                                                                        interaction = age * as.numeric(gender)))
+get_regression_table(score_model_interaction2)
 
+summary(score_model_interaction2)
+summary(score_model_interaction)
 
-
+skim()
