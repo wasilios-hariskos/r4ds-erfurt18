@@ -14,7 +14,7 @@ setwd(oldwd)
 
 library(dplyr)
 practice <- ztt$subjects %>% 
-  filter(Treatment == 1, Period >= 1) %>%
+  filter(Treatment == 1, Period < 1) %>%
   mutate(share = Share,
          group = group_indices(., Share, Date, MatchGroup),
          subject = group_indices(., Share, Date, MatchGroup, Subject),
@@ -101,10 +101,10 @@ cohen.d(d = indObs$`mean(quantity)`,
         f = indObs$share)
 
 
-treatment = rnorm(100,mean=10)
-control = rnorm(100,mean=12)
-d = (c(treatment,control))
-f = rep(c("Treatment","Control"),each=100)
+treatment = rnorm(100,mean = 10)
+control = rnorm(100,mean = 12)
+d = (c(treatment, control))
+f = rep(c("Treatment","Control"),each = 100)
 ## compute Cohen's d
 ## treatment and control
 cohen.d(treatment,control)
